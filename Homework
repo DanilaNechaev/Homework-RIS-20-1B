@@ -1,0 +1,107 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+float Len(int x1, int y1, int x2, int y2)
+{
+	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+float Square(int x1, int y1, int x2, int y2, int x3, int y3)
+{
+	float a = Len(x1, y1, x2, y2);
+	float b = Len(x2, y2, x3, y3);
+	float c = Len(x3, y3, x1, y1);
+	float p = (a + b + c) / 2;
+	return sqrt(p * (p - a) * (p - b) * (p - c));
+}
+float Squarel(int num, ...)
+{
+	int x[100], y[100], m;
+	int* p = &num;
+	for (int i = 0; i < num; i++)
+	{
+		x[i] = *(p + 2);
+		y[i] = *(p + 4);
+		p += 4;
+	}
+	int xm1, ym1, xm2, ym2, p1, p2;
+	for (int i = 0; i < num - 1; i++)
+	{
+		for (int k = i + 1; k < num; k++)
+		{
+			if (Len(x[i], y[i], x[k], y[k]) > m)
+			{
+				m = Len(x[i], y[i], x[k], y[k]);
+				xm1 = x[i]; ym1 = y[i];
+				xm2 = x[k]; ym2 = y[k];
+				p1 = i; p2 = k;
+			}
+		}
+	}
+	int p3 = p1;
+	while (p3 == p1 || p3 == p2) p3 = rand() % num;
+	return Square(x[p3], y[p3], xm1, ym1, xm2, ym2);
+}
+int F1(int m[100][100], int h, int w)
+{
+	for (int i = 0; i < (h + 1) / 2; i++) for (int k = 0; k < w; k++) m[i][k] = m[2 * i][k];
+	return (h + 1) / 2;
+}
+int F1(int a[], int l)
+{
+	for (int i = 0; i < l - 2; i++)
+	{
+		if (a[i] == 0 && a[i + 1] != 0 && a[i + 2] == 0)
+		{
+			for (int k = i + 1; k < l - 1; k++) a[k] = a[k];
+		}
+	}
+	return l;
+}
+int main()
+{
+
+	int choice;
+	cout << "which program to execute 1 or 2";
+	cin >> choice;
+	if (choice == 1)
+	{
+		int h = 0;
+		int w = 0;
+		while (h <= 1 || w <= 1)
+		{
+			cout << "Enter the height and width of the array\n";
+			cin >> h >> w;
+		}
+		int m[100][100];
+		for (int i = 0; i < h; i++)
+		{
+			cout << "Enter number line  " << i + 1 << "\n";
+			for (int k = 0; k < w; k++) cin >> m[i][k];
+		}
+		cout << "=====\n";
+		h = F1(m, h, w);
+		for (int i = 0; i < h; i++)
+		{
+			for (int k = 0; k < w; k++) cout << m[i][k] << " ";
+			cout << endl;
+		}
+		int l = 0;
+		while (l <= 2)
+		{
+			cout << "Enter the length of the array\n";
+			cin >> l;
+		}
+		int a[1];
+		cout << "Enter an array\n";
+		for (int i = 0; i < l; i++) cin >> a[i];
+		l = F1(a, l);
+		for (int i = 0; i < l; i++) cout << a[i] << " ";
+		cout << endl;
+	}
+	else if (choice == 2)
+	{
+		cout << "Coordinates: " << "1,2,5,3,6,5,4,7,1,5,0,3\n";
+		cout << "S=" << Squarel(6, 1, 2, 5, 3, 6, 5, 4, 7, 1, 5, 0, 3) << endl;
+	}
+	system("pause");
+}
